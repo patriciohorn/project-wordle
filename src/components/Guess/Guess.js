@@ -1,14 +1,22 @@
 import React from 'react';
 import { range } from '../../utils';
+import { checkGuess } from '../../game-helpers';
 
-function Guess({ value }) {
+function Cell({ letter, status }) {
+  const className = status ? `cell ${status}` : 'cell';
+  return <span className={className}>{letter}</span>;
+}
+
+function Guess({ value, answer }) {
+  const result = checkGuess(value, answer);
   return (
     <p className="guess">
       {range(5).map((num) => (
-        <span key={num} className="cell">
-          {/* Accesing a value[num] when value is undefined or the array is empty will throw an error. I first check if value exists before trying to access value[num]. I explicitly set the fallback to undefined  */}
-          {value ? value[num] : undefined}
-        </span>
+        <Cell
+          key={num}
+          letter={result ? result[num].letter : undefined}
+          status={result ? result[num].status : undefined}
+        />
       ))}
     </p>
   );
